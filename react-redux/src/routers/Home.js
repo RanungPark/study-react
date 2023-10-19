@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { actionCreators } from '../store';
+import ToDo from '../components/ToDo';
 
 const Home = ({todos, addToDo}) => {
-  console.log(todos);
   const [text, setText] = useState("");
   
   const onChange = e => {
@@ -23,7 +23,7 @@ const Home = ({todos, addToDo}) => {
         <input value={text} onChange={onChange} type='text'/>
         <button>Add</button>
       </form>
-      <ul></ul>
+      <ul>{todos.map(toDo => <ToDo {...toDo} key={text.id}/>)}</ul>
     </>
   );
 };
