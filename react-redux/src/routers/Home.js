@@ -6,6 +6,7 @@ import ToDo from '../components/ToDo';
 const Home = ({todos, addToDo}) => {
   const [text, setText] = useState("");
   
+
   const onChange = e => {
     setText(e.target.value);
   }
@@ -23,18 +24,18 @@ const Home = ({todos, addToDo}) => {
         <input value={text} onChange={onChange} type='text'/>
         <button>Add</button>
       </form>
-      <ul>{todos.map(toDo => <ToDo {...toDo} key={text.id}/>)}</ul>
+      <ul>{todos.map(toDo => <ToDo {...toDo} key={toDo.id}/>)}</ul>
     </>
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     todos: state
   }
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     addToDo : text => dispatch(actionCreators.addToDo(text))
   }
