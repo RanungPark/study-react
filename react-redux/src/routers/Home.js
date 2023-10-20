@@ -3,12 +3,14 @@ import { connect, useDispatch, useSelector } from 'react-redux';
 import { actionCreators } from '../store';
 import ToDo from '../components/ToDo';
 import { addToDo } from '../modules/todo';
+import { addToDoToolkit } from '../modules/todoToolkit';
 
 // const Home = ({todos, addToDo}) => {
 const Home = () => {
   const [text, setText] = useState("");
-  const {toDos} = useSelector(({todo}) => ({
-    toDos : todo.toDos
+  const {toDos, todos} = useSelector(({todo, todoToolkit}) => ({
+    toDos : todo.toDos,
+    todos : todoToolkit.todos
   }))
   const dispatch = useDispatch();
 
@@ -19,9 +21,12 @@ const Home = () => {
   const onSubmit = e => {
     e.preventDefault();
     setText("")
-    // addToDo(text)
+    addToDo(text)
     dispatch(
       addToDo(text)
+    )
+    dispatch(
+      addToDoToolkit(text)
     )
   }
 
@@ -32,7 +37,9 @@ const Home = () => {
         <input value={text} onChange={onChange} type='text'/>
         <button>Add</button>
       </form>
-      <ul>{toDos?.map(toDo => <ToDo {...toDo} key={toDo.id}/>)}</ul>
+      <ul>{toDos?.map(toDo => <ToDo {...toDo} key={toDo.id} type={'nomal'}/>)}</ul>
+      <br/>
+      <ul>{todos?.map(todo => <ToDo {...todo} key={todo.id} type={'toolkit'}/>)}</ul>  
     </>
   );
 };
