@@ -26,8 +26,9 @@ const Coin = styled.li`
 
   a{
     transition: color .2s ease-in;
-    display: block;
+    display: flex;
     padding: 20px;
+    align-items: center;
   }
 
   &:hover{
@@ -45,6 +46,12 @@ const Tittle = styled.h1`
 const Loding = styled.span`
   text-align: center;
   display: block;
+`
+
+const Img = styled.img`
+  width: 35px;
+  height: 35px;
+  margin-right: 10px;
 `
 
 interface coinsInterface {
@@ -77,9 +84,21 @@ const Coins = () => {
         </Tittle>
       </Header>
       {
-        loding ? <Loding>loding...</Loding> :
+        loding ? <Loding>Loding...</Loding> :
         <CoinList>
-        {coins.map(coin => <Coin key={coin.id}><Link to={`/${coin.id}`}>{coin.name} &rarr;</Link></Coin>)}
+        {coins.map(coin => 
+          <Coin key={coin.id}>
+            <Link to={{
+              pathname : coin.id,
+              state : {
+                name: coin.name,
+              }
+            }}>
+              <Img src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}/>
+              {coin.name} &rarr;
+            </Link>
+          </Coin>
+        )}
       </CoinList>
       }
     </Container>
