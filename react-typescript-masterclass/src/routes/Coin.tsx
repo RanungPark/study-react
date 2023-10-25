@@ -9,9 +9,9 @@ const Coin = () => {
   const { coinId } = useParams<RouteParams>();
   
   return (
-    <div> 
+    <h1> 
       Coin:{coinId}
-    </div>
+    </h1>
   );
 };
 
