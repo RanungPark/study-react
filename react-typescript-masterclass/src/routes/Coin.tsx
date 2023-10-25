@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { Route, Switch, useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import Chart from './Chart';
+import Price from './Price';
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -23,6 +25,31 @@ const Tittle = styled.h1`
 const Loding = styled.span`
   text-align: center;
   display: block;
+`
+
+const OverView = styled.div`
+  display: flex;
+  justify-content: space-between;
+  background-color: rgba(0,0,0,0.5);
+  padding: 10px 20px;
+  border-radius: 10px;
+`
+
+const OverViewItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  span:first-child {
+    font-size: 10px;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+`
+
+const Description = styled.p`
+  margin: 20px 0px;
 `
 
 interface IRouteParams {
@@ -94,7 +121,7 @@ interface IQuotes {
 const Coin = () => {
   const [loding, setLoding] = useState(true);
   const { coinId } = useParams<IRouteParams>();
-  const {state} = useLocation<IRouteState>();
+  const { state } = useLocation<IRouteState>();
   const [info, setInfo] = useState<IInfoData>();
   const [priceInfo, setPriceInfo] = useState<IPriceDate>();
   
@@ -111,11 +138,46 @@ const Coin = () => {
     <Container>
       <Header>
         <Tittle>
-          {state?.name || 'Loding...'}
+          {state?.name ? state.name : loding ? 'Loding...' : info?.name}
         </Tittle>
       </Header>
       {
-        loding ? <Loding>Loding...</Loding> : null
+        loding ? <Loding>Loding...</Loding> : 
+        <>
+          <OverView>
+            <OverViewItem>
+              <span>Rank:</span>
+              <span>{info?.rank}</span>
+            </OverViewItem>
+            <OverViewItem>
+              <span>Symbol:</span>
+              <span>{info?.symbol}</span>
+            </OverViewItem>
+            <OverViewItem>
+              <span>Open Source:</span>
+              <span>{info?.open_source}</span>
+            </OverViewItem>
+          </OverView>
+          <Description>{info?.description}</Description>
+          <OverView>
+            <OverViewItem>
+              <span>Total Supply:</span>
+              <span>{priceInfo?.total_supply}</span>
+            </OverViewItem>
+            <OverViewItem>
+              <span>Max Supply:</span>
+              <span>{priceInfo?.max_supply}</span>
+            </OverViewItem>
+          </OverView>
+          <Switch>
+            <Route path={`/${coinId}/chart`}>
+              <Chart />
+            </Route>
+            <Route path={`/${coinId}/price`}>
+              <Price />
+            </Route>
+          </Switch>
+        </>
       }
     </Container>
   );
