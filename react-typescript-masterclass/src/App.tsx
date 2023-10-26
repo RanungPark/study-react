@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Router from './routes/Router';
-import { createGlobalStyle } from 'styled-components';
+import styled, { ThemeProvider, createGlobalStyle } from 'styled-components';
 import { ReactQueryDevtools } from 'react-query/devtools'
+import { darkTheme, lightTheme } from './theme';
+import { BiSolidSun, BiSolidMoon} from 'react-icons/bi';
 
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Source+Sans+3:wght@300;400&display=swap');
@@ -42,6 +44,15 @@ const GlobalStyle = createGlobalStyle`
     background-color: ${props => props.theme.bgColor};
     color: ${props => props.theme.textColor};
     font-family: 'Source Sans 3', sans-serif;
+
+    &::-webkit-scrollbar {
+    display:none;
+    }
+
+    & {
+    -ms-overflow-style: none;
+    scrollbar-width: none;  
+    }
   }
   a {
     text-decoration: none;
@@ -63,13 +74,33 @@ const GlobalStyle = createGlobalStyle`
     border-spacing: 0;
   }
 `
+
+const ToggleBox = styled.button`
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 0;
+  background-color: ${props => props.theme.accentColor};
+  color:  ${props => props.theme.bgColor};
+  font-size: 25px;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+`
 const App = () => {
+  const [isDark, setIsDark] = useState(true);
+
+  const toggleTheme = () => setIsDark((currnet) => !currnet);
   return (
-    <>
+    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+      <ToggleBox onClick={toggleTheme}>{isDark ? <BiSolidSun/> : <BiSolidMoon/>}</ToggleBox>
       <GlobalStyle/>
       <Router />
       <ReactQueryDevtools initialIsOpen={true}/>
-    </>
+    </ThemeProvider>
   );
 };
 
