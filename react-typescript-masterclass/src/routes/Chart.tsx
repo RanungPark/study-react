@@ -20,11 +20,11 @@ interface IChartProps {
 
 const Chart = ({coinId}:IChartProps) => {
   const { isLoading, data } = useQuery<IHistorical[]>(
-    ["ohlcv", coinId], 
+    ["LineOHLCV", coinId], 
     () =>fetchCoinHistory(coinId), 
-    {
-    refetchInterval: 10000,
-    }
+    // {
+    // refetchInterval: 10000,
+    // }
   );
 
   return (
@@ -77,7 +77,6 @@ const Chart = ({coinId}:IChartProps) => {
             },
           }}
         />)
-       
       }
     </div>
   );
