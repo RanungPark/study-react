@@ -22,9 +22,9 @@ const Chart = ({coinId}:IChartProps) => {
   const { isLoading, data } = useQuery<IHistorical[]>(
     ["LineOHLCV", coinId], 
     () =>fetchCoinHistory(coinId), 
-    // {
-    // refetchInterval: 10000,
-    // }
+    {
+    refetchInterval: 10000,
+    }
   );
 
   return (

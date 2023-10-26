@@ -89,7 +89,13 @@ const signDecision = (data : number) => (
 )
 
 const Price = ({coinId}:IPriceProps) => {
-  const {isLoading, data} = useQuery<IPriceDate>(['price', coinId], () =>fetchCoinTickers(coinId))
+  const {isLoading, data} = useQuery<IPriceDate>(
+    ['price', coinId], 
+    () =>fetchCoinTickers(coinId), 
+    {
+    refetchInterval: 10000,
+    }
+  )
 
   const priceObject = [
     {

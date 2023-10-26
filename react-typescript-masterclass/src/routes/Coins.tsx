@@ -6,9 +6,20 @@ import { fetchCoins } from '../api';
 import { Helmet } from 'react-helmet';
 
 const Container = styled.div`
+  height: 100vh;
   padding: 0px 20px;
   max-width: 480px;
   margin: 0 auto;
+  overflow: scroll;
+
+  &::-webkit-scrollbar {
+    display:none;
+    }
+
+    & {
+    -ms-overflow-style: none;
+    scrollbar-width: none;  
+    }
 `
 
 const Header = styled.div`
@@ -19,14 +30,14 @@ const Header = styled.div`
 `
 
 const CoinList = styled.ul`
+   
 `
 
 const Coin = styled.li`
-  background-color: white;
-  color: ${props => props.theme.bgColor};
+  background-color: ${props => props.theme.boxColor};
+  color: ${props => props.theme.textColor};
   border-radius: 15px;
   margin-bottom: 10px;
-
   a{
     transition: color .2s ease-in;
     display: flex;
@@ -64,8 +75,7 @@ interface ICoins {
 }
 
 const Coins = () => {
-  
-  const { isLoading, data } = useQuery<ICoins[]>('allCoins',fetchCoins) 
+  const { isLoading, data } = useQuery<ICoins[]>('allCoins',fetchCoins)
 
   return (
     <Container>

@@ -19,7 +19,13 @@ interface ICandlesticProps {
 }
 
 const Candlestick = ({coinId}:ICandlesticProps) => {
-  const {isLoading, data} = useQuery<IHistorical[]>(['CandlesickOHLCV', coinId], () =>fetchCoinHistory(coinId))
+  const {isLoading, data} = useQuery<IHistorical[]>(
+    ['CandlesickOHLCV', coinId], 
+    () =>fetchCoinHistory(coinId), 
+    {
+    refetchInterval: 10000,
+    }
+  )
 
   const mapOHLCData = data?.map((data) => (
     {
