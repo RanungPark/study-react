@@ -145,21 +145,20 @@ interface IQuotes {
 const Coin = () => {
   const { coinId } = useParams<IRouteParams>();
   const { state } = useLocation<IRouteState>();
-
   const chartMatch = useRouteMatch("/:coinId/chart");
   const priceMatch = useRouteMatch("/:coinId/price");
   const { isLoading: infoLoading , data: infoData} = useQuery<IInfoData>(['info',coinId], () => fetchCoinInfo(coinId));
   const { isLoading: priceLoding , data: priceData} = useQuery<IPriceDate>(['price',coinId], () => fetchCoinTickers(coinId));
-  
+  const loding = infoLoading || priceLoding;
   return (
     <Container>
       <Header>
         <Tittle>
-          {state?.name ? state.name : infoLoading || priceLoding ? 'Loding...' : infoData?.name}
+          {state?.name ? state.name : loding ? 'Loding...' : infoData?.name}
         </Tittle>
       </Header>
       {
-        infoLoading || priceLoding ? <Loding>Loding...</Loding> : 
+        loding ? <Loding>Loding...</Loding> : 
         <>
           <OverView>
             <OverViewItem>
