@@ -35,7 +35,7 @@ const Chart = ({coinId}:IChartProps) => {
           series={[
             {
               name: "Price",
-              data: data?.map((price) => price.close) as number[],
+              data: data?.map((price) => price.close) || [],
             },
           ]}
           options={{

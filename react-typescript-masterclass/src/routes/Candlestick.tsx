@@ -31,15 +31,14 @@ const Candlestick = ({coinId}:ICandlesticProps) => {
     {
       x: new Date(parseFloat(data.time_close) *1000).toUTCString(),
       y: [data.open, data.high, data.low, data.close]
-    })
-    )
+    })) || [];
 
   return (
     <div>
       {
         isLoading ? 'Loading...' : (<ApexChart
           type='candlestick'
-          series={[{data: mapOHLCData}]as unknown as number[]}
+          series={[{data : mapOHLCData}]}
           options={{
             theme: {
               mode: "dark",

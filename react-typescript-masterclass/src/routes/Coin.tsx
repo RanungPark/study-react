@@ -49,6 +49,7 @@ const Home = styled.div`
     font-size: 30px;
     display: block;
     transition: color 0.2s ease-in-out;
+    color: ${props => props.theme.boxColor};
 
     &:hover {
       color: ${props => props.theme.accentColor};
