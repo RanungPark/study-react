@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Router from './routes/Router';
 import styled, { ThemeProvider, createGlobalStyle } from 'styled-components';
 import { ReactQueryDevtools } from 'react-query/devtools'
 import { darkTheme, lightTheme } from './theme';
 import { BiSolidSun, BiSolidMoon} from 'react-icons/bi';
-
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { isDarkAtom } from './atoms';
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Source+Sans+3:wght@300;400&display=swap');
   html, body, div, span, applet, object, iframe,
@@ -91,12 +92,13 @@ const ToggleBox = styled.button`
   justify-content: center;
 `
 const App = () => {
-  const [isDark, setIsDark] = useState(true);
+  const isDark = useRecoilValue(isDarkAtom);
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleDarkAtom = () => setDarkAtom((prev) => !prev);
 
-  const toggleTheme = () => setIsDark((currnet) => !currnet);
   return (
     <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
-      <ToggleBox onClick={toggleTheme}>{isDark ? <BiSolidSun/> : <BiSolidMoon/>}</ToggleBox>
+      <ToggleBox onClick={toggleDarkAtom}>{isDark ? <BiSolidSun/> : <BiSolidMoon/>}</ToggleBox>
       <GlobalStyle/>
       <Router />
       <ReactQueryDevtools initialIsOpen={true}/>

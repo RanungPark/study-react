@@ -178,9 +178,9 @@ interface IQuotes {
 const Coin = () => {
   const { coinId } = useParams<IRouteParams>();
   const { state } = useLocation<IRouteState>();
-  const chartMatch = useRouteMatch("/:coinId/line-chart");
-  const candlestickMatch = useRouteMatch("/:coinId/candlestick");
-  const priceMatch = useRouteMatch("/:coinId/price");
+  const chartMatch = useRouteMatch("/coin-tracker/:coinId/line-chart");
+  const candlestickMatch = useRouteMatch("/coin-tracker/:coinId/candlestick");
+  const priceMatch = useRouteMatch("/coin-tracker/:coinId/price");
   const { isLoading: infoLoading , data: infoData} = useQuery<IInfoData>(['info',coinId], () => fetchCoinInfo(coinId));
   const { isLoading: priceLoding , data: priceData} = useQuery<IPriceDate>(
     ['ticker',coinId], 
@@ -200,7 +200,7 @@ const Coin = () => {
       </Helmet>
       <Header>
         <Home>
-          <Link to={'/'}>
+          <Link to={'/coin-tracker'}>
             { loading ? null :<AiOutlineLeft />}
           </Link>
         </Home>
@@ -241,24 +241,24 @@ const Coin = () => {
 
           <Tabs>
             <Tab isActive={chartMatch !== null}>
-              <Link to={`/${coinId}/line-chart`}>Chart</Link>
+              <Link to={`/coin-tracker/${coinId}/line-chart`}>Chart</Link>
             </Tab>
             <Tab isActive={candlestickMatch !== null}>
-              <Link to={`/${coinId}/candlestick`}>Candlestick</Link>
+              <Link to={`/coin-tracker/${coinId}/candlestick`}>Candlestick</Link>
             </Tab>
             <Tab isActive={priceMatch !== null}>
-              <Link to={`/${coinId}/price`}>Price</Link>
+              <Link to={`/coin-tracker/${coinId}/price`}>Price</Link>
             </Tab>
           </Tabs>
 
           <Switch>
-            <Route path={`/:coinId/line-chart`}>
+            <Route path={`/coin-tracker/:coinId/line-chart`}>
               <Chart coinId={coinId}/>
             </Route>
-            <Route path={`/:coinId/candlestick`}>
+            <Route path={`/coin-tracker/:coinId/candlestick`}>
               <Candlestick coinId={coinId}/>
             </Route>
-            <Route path={`/:coinId/price`}>
+            <Route path={`/coin-tracker/:coinId/price`}>
               <Price coinId={coinId}/>
             </Route>
           </Switch>

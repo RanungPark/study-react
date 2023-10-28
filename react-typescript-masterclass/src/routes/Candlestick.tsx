@@ -2,6 +2,8 @@ import React from 'react';
 import { useQuery } from 'react-query';
 import ApexChart from 'react-apexcharts';
 import { fetchCoinHistory } from '../api';
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from '../atoms';
 
 interface IHistorical {
   time_open: string;
@@ -31,7 +33,8 @@ const Candlestick = ({coinId}:ICandlesticProps) => {
     {
       x: new Date(parseFloat(data.time_close) *1000).toUTCString(),
       y: [data.open, data.high, data.low, data.close]
-    })) || [];
+    })) ?? [];
+    const isDark = useRecoilValue(isDarkAtom);
 
   return (
     <div>
@@ -41,7 +44,7 @@ const Candlestick = ({coinId}:ICandlesticProps) => {
           series={[{data : mapOHLCData}]}
           options={{
             theme: {
-              mode: "dark",
+              mode: isDark ? "dark" : "light",
             },
             chart: {
               width: 500,

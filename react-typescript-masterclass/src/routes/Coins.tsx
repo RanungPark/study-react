@@ -95,7 +95,7 @@ const Coins = () => {
         {data?.slice(0,100).map(coin => 
           <Coin key={coin.id}>
             <Link to={{
-              pathname : coin.id,
+              pathname : `/coin-tracker/${coin.id}`,
               state : {
                 name: coin.name,
               }

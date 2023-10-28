@@ -7,10 +7,10 @@ const Router = () => {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/:coinId">
+        <Route path="/coin-tracker/:coinId">
           <Coin />
         </Route>
-        <Route path="/">
+        <Route path="/coin-tracker">
           <Coins />
         </Route>
       </Switch>
