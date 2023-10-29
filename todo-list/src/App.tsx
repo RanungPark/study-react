@@ -1,6 +1,6 @@
 import React from 'react';
 import { createGlobalStyle } from 'styled-components';
-import ToDoList from './ToDoList';
+import ToDoList from './components/ToDoList';
 
 const GlobalStyle =  createGlobalStyle`
    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Source+Sans+3:wght@300;400&display=swap');
