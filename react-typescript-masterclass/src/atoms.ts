@@ -1,6 +1,6 @@
 import { atom } from 'recoil'
 
 export const isDarkAtom = atom({
-  key: 'isDaek',
+  key: 'isDark',
   default: true,
 })
