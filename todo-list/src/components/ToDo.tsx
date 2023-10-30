@@ -1,9 +1,11 @@
 import React from 'react';
-import { IToDo, toDoState } from '../atom';
+import { IToDo, toDoState,  Categories } from '../atom';
 import { useSetRecoilState } from 'recoil';
+
 
 const ToDo = ({text, id, category}: IToDo) => {
   const setToDos = useSetRecoilState(toDoState);
+
   const onChange = (newCategory : IToDo['category']) => {
     setToDos((oldToDos) => {
       const targetIndex = oldToDos.findIndex((todo) => todo.id === id);
@@ -19,9 +21,9 @@ const ToDo = ({text, id, category}: IToDo) => {
   return (
     <li>
       <span>{text}</span>
-      {category !== 'TO_DO' && (<button name='TO_DO' onClick={()=>onChange('TO_DO')}>To Do</button>)}
-      {category !== 'DOING' && (<button name='DOING' onClick={()=>onChange('DOING')}>Doing</button>)}
-      {category !== 'DONE' && (<button name='DONE' onClick={()=>onChange('DONE')}>Done</button>)}
+      {category !== Categories.TO_DO  && (<button  onClick={()=>onChange(Categories.TO_DO)}>To Do</button>)}
+      {category !== Categories.DOING && (<button  onClick={()=>onChange(Categories.DOING)}>Doing</button>)}
+      {category !== Categories.DONE && (<button  onClick={()=>onChange(Categories.DONE)}>Done</button>)}
     </li>
   );
 };
