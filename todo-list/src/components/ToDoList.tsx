@@ -1,10 +1,11 @@
 import React from 'react';
-import { useRecoilValue } from 'recoil';
-import { toDoSelector } from '../atom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { isDarkAtom, toDoSelector } from '../atom';
 import CreateToDo from './CreateToDo';
 import ToDo from './ToDo';
 import styled from 'styled-components';
 import Category from './Category';
+import { BiSolidMoon, BiSolidSun } from 'react-icons/bi';
 
 const Conteiner = styled.div`
   max-width: 480px;
@@ -34,10 +35,24 @@ const HeaderTitle = styled.h1`
 const ToggleThemeButton = styled.button`
   width: 48px;
   height: 48px;
+  border-radius: 50%;
+  border: 0;
+  background-color: ${props => props.theme.accentColor};
+  color:  ${props => props.theme.bgColor};
+  font-size: 25px;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 `
 
 const ToDoList = () => {
   const toDos = useRecoilValue(toDoSelector);
+  const [isDark, setIsDark] = useRecoilState(isDarkAtom);
+
+  const onClick = () => {
+    setIsDark(prev => !prev);
+  }
 
   return (
     <Conteiner>
@@ -45,8 +60,8 @@ const ToDoList = () => {
         <HeaderTitle>
           To Dos
         </HeaderTitle>
-        <ToggleThemeButton>
-          toggle
+        <ToggleThemeButton onClick={onClick}>
+          {isDark ? <BiSolidSun/> : <BiSolidMoon/>}
         </ToggleThemeButton>
       </Header>
       <Category />

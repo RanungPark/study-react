@@ -1,5 +1,5 @@
 import React from 'react';
-import { IToDo, toDoState, categoryState, categoriesState } from '../atom';
+import { IToDo, toDoState, activeCategoryState, categoriesState } from '../atom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 
@@ -12,11 +12,13 @@ const ToDoBox = styled.div`
   flex-direction: column;
   justify-content: center;
   margin: 20px 0;
-  border-bottom: 0.1px solid ${props => props.theme.textColor};
+  border-bottom: 0.1px solid ${props => props.theme.boxColor};
 `
 
 const ToDoText = styled.span`
   font-size: 16px;
+  word-wrap: break-word;
+  line-height: 1.5
 `
 
 const CategoryButtonGrup = styled.div`
@@ -35,33 +37,46 @@ const CategoryButton = styled.button`
   color: ${props => props.theme.textColor};
   border: 0;
   opacity: 0.5;
+  
+  &:hover{
+    color: ${props => props.theme.accentColor};
+    opacity: 1;
+  }
 `
 const CategoryDeleteButton = styled(CategoryButton)`
-  color: #e84118;
+  color:  #ff6b81;
   opacity: 0.8;
+  
+  &:hover{
+    color: #ff4757;
+  }
 `
 
 const ToDo = ({text, id}: IToDo) => {
   const setToDos = useSetRecoilState(toDoState);
-  const usingCategory = useRecoilValue(categoryState);
+  const usingCategory = useRecoilValue(activeCategoryState);
   const categories = useRecoilValue(categoriesState);
 
   const onChange = (newCategory : IToDo['category']) => {
     setToDos((oldToDos) => {
       const targetIndex = oldToDos.findIndex((todo) => todo.id === id);
-      const newToDos = {text, id, category : newCategory, ...oldToDos};
-      return [
+      const newToDos = {text, id, category : newCategory};
+      const chagneToDos = [
         ...oldToDos.slice(0,targetIndex),
         newToDos,
         ...oldToDos.slice(targetIndex + 1),
-      ];
+      ]
+      localStorage.setItem('toDos', JSON.stringify(chagneToDos));
+      return chagneToDos;
     })
+    
   }
 
   const onDelete = () => {
     setToDos((oldToDos) => {
-      const newToDos = oldToDos.filter(todo => todo.id !== id);
-      return newToDos
+      const deleteToDos = oldToDos.filter(todo => todo.id !== id);
+      localStorage.setItem('toDos', JSON.stringify(deleteToDos));
+      return deleteToDos
     })
   }
 

@@ -1,8 +1,9 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useSetRecoilState } from 'recoil';
-import { Categories, toDoState } from '../atom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { activeCategoryState, toDoState } from '../atom';
 import styled from 'styled-components';
+import { LuListPlus } from 'react-icons/lu';
 
 interface IForm {
   toDo: string;
@@ -31,25 +32,28 @@ const FormInput = styled.input`
   height: 40px;
   outline: none;
   box-shadow: none;
-  background-color: ${props => props.theme.textColor};
-  color: ${props => props.theme.bgColor};
+  color: #2f3640;
   padding-left: 10px;
 `
 
 const FormButton = styled.button`
-  font-size: 12px;
+  font-size: 15px;
+  width: 40px;
   border: 0;
   height: 40px;
   background-color: ${props => props.theme.boxColor};
   color: ${props => props.theme.textColor};
+  cursor: pointer;
 `
 
 const CreateToDo = () => {
-  const {register, handleSubmit, setValue} = useForm<IForm>();
-  const setToDos = useSetRecoilState(toDoState);
+  const {register, handleSubmit, setValue, formState} = useForm<IForm>();
+  const [ToDos, setToDos] = useRecoilState(toDoState);
+  const activeCategory = useRecoilValue(activeCategoryState);
 
   const handleValid = ({toDo} : IForm) => {
-    setToDos((prev) => [{text: toDo, id: Date.now(), category: Categories.TO_DO },...prev]);
+    setToDos((prev) => [{text: toDo, id: Date.now(), category: activeCategory },...prev]);
+    localStorage.setItem('toDos', JSON.stringify([{text: toDo, id: Date.now(), category: activeCategory }, ...ToDos]))
     setValue("toDo", "");
   }
 
@@ -58,12 +62,15 @@ const CreateToDo = () => {
       <FormStyle onSubmit={handleSubmit(handleValid)}>
         <FormInput 
           {...register('toDo',{
-            required: "please write a To Do"
+            required: "To Do List를 작성해주세요"
           })} 
-          placeholder='ToDo 작성하기'
+          placeholder={`${activeCategory} 카테고리에 작성할 To Do List를 작성해주세요`}
         />
-        <FormButton>Add</FormButton>
+        <FormButton>
+          <LuListPlus />
+        </FormButton>
       </FormStyle>
+        <span>{formState?.errors?.toDo?.message}</span>
     </FormBox>
   );
 };

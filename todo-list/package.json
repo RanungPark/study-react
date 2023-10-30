@@ -14,7 +14,9 @@
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
     "react-hook-form": "^7.47.0",
+    "react-icons": "^4.11.0",
     "react-query": "^3.39.3",
+    "react-router": "^6.17.0",
     "react-router-dom": "^6.17.0",
     "react-scripts": "5.0.1",
     "recoil": "^0.7.7",
@@ -45,5 +47,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "homepage": "https://RanungPark.github.io/todo-list"
 }

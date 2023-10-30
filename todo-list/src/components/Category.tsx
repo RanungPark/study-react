@@ -1,8 +1,9 @@
 import React from 'react';
-import { categoriesState, categoryState} from '../atom';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { categoriesState, activeCategoryState} from '../atom';
+import { useRecoilState } from 'recoil';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
+import { BiAddToQueue } from 'react-icons/bi';
 
 const CategoriesBox = styled.div`
   display: grid;
@@ -10,9 +11,9 @@ const CategoriesBox = styled.div`
   margin: 20px 0;
   gap: 5px;
 `
-const CategoryButton = styled.button`
+const CategoryButton = styled.button<{isActive: boolean}>`
   border: 0;
-  background-color: ${props => props.theme.boxColor};
+  background-color: ${props => props.isActive ? props.theme.accentColor : props.theme.boxColor};
   color: ${props => props.theme.textColor};
   height: 30px;
   width: 100px;
@@ -34,7 +35,7 @@ const FormStyle = styled.form`
   border: 2px solid ${props => props.theme.boxColor};
   display: flex;
   align-items: center;
-  border-radius: 15px;
+  border-radius: 12px;
   overflow: hidden;
 `
 
@@ -45,17 +46,18 @@ const FormInput = styled.input`
   height: 30px;
   outline: none;
   box-shadow: none;
-  background-color: ${props => props.theme.textColor};
-  color: ${props => props.theme.bgColor};
+  color: #2f3640;
   padding-left: 10px;
 `
 
 const FormButton = styled.button`
   font-size: 12px;
   border: 0;
+  width: 40px;
   height: 30px;
   background-color: ${props => props.theme.boxColor};
   color: ${props => props.theme.textColor};
+  cursor: pointer;
 `
 
 interface IForm {
@@ -65,14 +67,17 @@ interface IForm {
 const Category = () => {
   const [categories, setCategories] = useRecoilState(categoriesState);
   const {register, setValue, handleSubmit, formState} = useForm<IForm>();
-  const setCategory = useSetRecoilState(categoryState);
+  const [activeCategory, setActiveCategory] = useRecoilState(activeCategoryState);
   const handleValid = ({category} : IForm) => {
-    setCategories((prev) => [...prev, category]);
+    setCategories((prev) => {
+      localStorage.setItem('category',JSON.stringify([...prev, category]))
+      return[...prev, category]
+    });
     setValue('category', '');
   }
 
   const onChange = (newCategory: IForm) => {
-    setCategory(newCategory as any)
+    setActiveCategory(newCategory as any)
   }
 
   return (
@@ -90,13 +95,17 @@ const Category = () => {
             })}
             placeholder='추가할 카테고리 작성'
             />
-          <FormButton>add</FormButton>
+          <FormButton>
+            <BiAddToQueue />
+          </FormButton>
         </FormStyle>
         <span>{formState?.errors?.category?.message}</span>
       </FormBox>
       <CategoriesBox>
         {
-          categories.map(category => <CategoryButton onClick={()=>onChange(category as any)}>{category}</CategoryButton>)
+          categories.map(category => <CategoryButton 
+            isActive={category === activeCategory}
+            onClick={()=>onChange(category as any)}>{category}</CategoryButton>)
         }
       </CategoriesBox>
     </div>

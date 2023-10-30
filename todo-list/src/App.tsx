@@ -1,6 +1,10 @@
 import React from 'react';
-import { createGlobalStyle } from 'styled-components';
+import { ThemeProvider, createGlobalStyle } from 'styled-components';
 import ToDoList from './components/ToDoList';
+import { darkTheme, lightTheme } from './theme';
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from './atom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 const GlobalStyle =  createGlobalStyle`
    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Source+Sans+3:wght@300;400&display=swap');
@@ -73,11 +77,18 @@ const GlobalStyle =  createGlobalStyle`
 `
 
 const App = () => {
+  const isDark = useRecoilValue(isDarkAtom);
+  
   return (
-    <>
+    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
       <GlobalStyle />
-      <ToDoList />
-    </>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/todo-list' element={<ToDoList />}>
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 };
 
