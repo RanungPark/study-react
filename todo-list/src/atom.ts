@@ -9,12 +9,17 @@ export enum Categories {
 export interface IToDo {
   text: string;
   id: number;
-  category: Categories;
+  category: string;
 }
 
-export const categoryState = atom<Categories>({
+export const categoriesState = atom({
+  key: 'categoies',
+  default: ["TO_DO","DOING","DONE"],
+})
+
+export const categoryState = atom({
   key: 'category',
-  default: Categories.TO_DO,
+  default: "TO_DO",
 })
 
 export const toDoState = atom<IToDo[]>({
@@ -27,6 +32,6 @@ export const toDoSelector = selector({
   get: ({get}) => {
     const toDos = get(toDoState);
     const category = get(categoryState);
-    return toDos.filter(toDo => toDo.category === category);
+    return toDos.filter(toDo => toDo.category === category)
   }
 })
