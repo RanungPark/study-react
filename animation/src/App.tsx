@@ -13,7 +13,7 @@ const Wrapper = styled.div`
 const Box = styled(motion.div)`
   width: 200px;
   height: 200px;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 1);
   border-radius: 40px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
   display: grid;
@@ -29,22 +29,8 @@ const Circle = styled(motion.div)`
 `
 
 const BoxVariants = {
-  start: {opacity: 0, scale: 0.5,},
-  end: { 
-    opacity : 1, 
-    scale: 1, 
-    transition: {
-      type: 'spring',
-      duration: 1,
-      bounce: 0.5,
-      delayChildren: 0.5,
-      staggerChildren: 0.15,
-    }}
-}
-
-const CircleVariants = {
-  start: {opacity:0, y: 50},
-  end: {opacity:1, y: 0},
+  hover: {scale: 1.5, rotateZ: 90},
+  tap: {scale: 1, borderRadius: "100px"},
 }
 
 const App = () => {
@@ -52,13 +38,10 @@ const App = () => {
     <Wrapper>
       <Box 
         variants={BoxVariants}
-        initial='start'
-        animate='end'
+        whileHover="hover"
+        whileTap="tap"
       >
-        <Circle variants={CircleVariants}/>
-        <Circle variants={CircleVariants} />
-        <Circle variants={CircleVariants} />
-        <Circle variants={CircleVariants} />
+        
       </Box>
     </Wrapper>
   );
