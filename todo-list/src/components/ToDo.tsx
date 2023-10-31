@@ -18,7 +18,7 @@ const ToDoBox = styled.div`
 const ToDoText = styled.span`
   font-size: 16px;
   word-wrap: break-word;
-  line-height: 1.5
+  line-height: 1.5;
 `
 
 const CategoryButtonGrup = styled.div`
