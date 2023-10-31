@@ -1,25 +1,14 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { motion } from "framer-motion"
+import { motion, motionValue, useScroll, useTransform } from "framer-motion"
 
-const Wrapper = styled.div`
-  height: 100vh;
+const Wrapper = styled(motion.div)`
+  height: 200vh;
   width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
-`
-
-const BiggerBox = styled(motion.div)`
-  background-color: rgba(255, 255, 255, 0.2);
-  width: 600px;
-  height: 600px;
-  border-radius: 40px;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
+  background:linear-gradient(135deg,rgb(116, 185, 255),rgb(9, 132, 227));
 `
 
 const Box = styled(motion.div)`
@@ -40,32 +29,24 @@ const Circle = styled(motion.div)`
   place-self: center;
 `
 
-const BoxVariants = {
-  hover: {scale: 1, rotateZ: 90},
-  tap: {scale: 1, borderRadius: "100px"},
-  drag: {backgroundColor: 'rgba(253, 121, 168,1.0)',
-   tranition: {
-    duration:10
-  }},
-}
-
 const App = () => {
-  const biggerBoxRef = useRef<HTMLDivElement>(null)
+  const x = motionValue(0);
+  const rotateZ = useTransform(x , [-800, 800], [-360, 360]);
+  const gradient = useTransform(x, [-800, 0, 800], [
+    'linear-gradient(135deg,rgb(85, 239, 196),rgb(0, 184, 148))', 
+    'linear-gradient(135deg,rgb(116, 185, 255),rgb(9, 132, 227))', 
+    'linear-gradient(135deg,rgb(162, 155, 254),rgb(108, 92, 231))'
+  ])
+  const {scrollYProgress} = useScroll();
+  const scale = useTransform(scrollYProgress, [0, 1], [1,5])
+  
   return (
-    <Wrapper>
-      <BiggerBox ref={biggerBoxRef}>
+    <Wrapper style={{background: gradient}}>
         <Box
-          drag
+          style={{ x, rotateZ, scale}}
+          drag='x'
           dragSnapToOrigin
-          dragElastic={0.5}
-          dragConstraints={biggerBoxRef}
-          variants={BoxVariants}
-          whileHover="hover"
-          whileTap="tap"
-          whileDrag="drag"
-        >
-        </Box>
-      </BiggerBox>
+        />
     </Wrapper>
   );
 };
