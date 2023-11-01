@@ -19,6 +19,11 @@ const Box = styled(motion.div)`
   position: absolute;
   top: 100px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+  font-weight: bold;
 `
 
 const Circle = styled(motion.div)`
@@ -51,41 +56,59 @@ const svg = {
 }
 
 const boxVariants = {
-  initial: {
+  initial:(isBack : boolean) => ({
+    x: isBack ? -500 : 500,
     opacity: 0,
     scale: 0,
-  },
+  }),
   animate: {
+    x:0,
     opacity: 1,
     scale: 1,
-    rotateZ: 360,
+    transition: {
+      duration: 0.3,
+    }
   },
-  exit: {
-    y: 100,
+  exit:(isBack : boolean) => ({
+    x: isBack ? 500 : -500,
     scale: 0,
     opacity: 0,
-  }
+    transition: {
+      duration: 0.3,
+    }
+  })
 }
 
 const App = () => {
-  const [showing, setShowing] = useState(false);
+  const [index, setIndex] = useState(1);
+  const [isBack, setIsBack] = useState(false);
 
-  const onToggle = () => {
-    setShowing(prev => !prev)
+  const onNext = () => {
+    setIsBack(false)
+    setIndex(prev => prev === 10 ? 10 : prev + 1)
+  }
+
+  const onPrev = () => {
+    setIsBack(true)
+    setIndex(prev => prev === 1 ? 1 : prev - 1)
   }
 
   return (
     <Wrapper>
-      <button onClick={onToggle}>click</button>
-      <AnimatePresence>
-        {showing ? 
-        <Box 
+      <AnimatePresence custom={isBack}>
+        <Box
+          custom={isBack}
           variants={boxVariants}
           initial='initial'
           animate='animate'
           exit='exit'
-        /> : null}
+          key={index}
+        >
+          {index}
+        </Box> 
       </AnimatePresence>
+      <button onClick={onPrev}>prev</button>
+      <button onClick={onNext}>next</button>
     </Wrapper>
   );
 };
