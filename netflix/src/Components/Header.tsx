@@ -1,11 +1,10 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useAnimation } from 'framer-motion';
 import { Link, useRouteMatch } from 'react-router-dom';
 
-const Nav = styled.nav`
+const Nav = styled(motion.nav)`
   display: flex;
-  background-color: black;
   width: 100%;
   font-size: 14px;
   justify-content: space-between;
@@ -75,7 +74,14 @@ const Circle = styled(motion.span)`
 const Input = styled(motion.input)`
   position: absolute;
   transform-origin: right center;
-  left: -150px;
+  right: 0px;
+  padding: 5px 10px;
+  padding-left: 40px;
+  z-index: -1;
+  color: white;
+  font-size: 16px;
+  background-color: transparent;
+  border: 1px solid ${props => props.theme.white.lighter};
 `
 
 const logoVariants = {
@@ -90,15 +96,39 @@ const logoVariants = {
   }
 }
 
+const navVariants = {
+  top: {
+    backgroundColor: 'rgba(0,0,0,0)'
+  },
+  scroll: {
+    backgroundColor: 'rgba(0,0,0,1)'
+  }
+}
+
 const Header = () => {
   const homeMatch = useRouteMatch("/");
   const tvMatch = useRouteMatch("/tv");
   const [searchOpen, setSearchOpen] = useState(false);
+  const { scrollY } = useScroll();
+  const navAnimation = useAnimation();
 
   const toggleSearch = () => setSearchOpen(prev => !prev);
+  useEffect(()=>{
+    scrollY.onChange(()=> {
+      if(scrollY.get() > 80) {
+        navAnimation.start('scroll')
+      }else {
+        navAnimation.start('top')
+      }
+    })
+  },[scrollY,navAnimation]);
 
   return (
-    <Nav>
+    <Nav
+      variants={navVariants}
+      initial='top'
+      animate={navAnimation}
+    >
       <Col>
         <Logo
          variants={logoVariants}
@@ -122,7 +152,7 @@ const Header = () => {
       <Col>
         <Search>
           <motion.svg
-            animate={{x: searchOpen ? -180 : 0}}
+            animate={{x: searchOpen ? -213 : 0}}
             transition={{type: 'linear'}}
             onClick={toggleSearch}
             fill="currentColor"
