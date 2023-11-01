@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { AnimatePresence, motion, motionValue, useScroll, useTransform } from "framer-motion"
+import { AnimatePresence, motion} from "framer-motion"
 
 const Wrapper = styled(motion.div)`
   height: 100vh;
@@ -8,19 +8,16 @@ const Wrapper = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: center;
-  background:linear-gradient(135deg,rgb(116, 185, 255),rgb(9, 132, 227));
-  gap: 100px;
+  background:linear-gradient(135deg,#e09,#d0e);
+  flex-direction: column;
+  gap: 50px;  
 `
 
 const Grid = styled(motion.div)`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   width: 50vw;
-  gap: 10px;
-  div:last-child, 
-  div:first-child {
-    grid-column: span 2
-  }
+  gap: 15px;
 `
 
 const Overlay = styled(motion.div)`
@@ -34,9 +31,9 @@ const Overlay = styled(motion.div)`
 `
 
 const Box = styled(motion.div)`
-  height: 200px;
-  background-color: rgba(255, 255, 255, 1);
-  border-radius: 40px;
+  height: 300px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
   display: flex;
   align-items: center;
@@ -51,50 +48,13 @@ const Circle = styled(motion.div)`
   place-self: center;
 `
 
-const Svg = styled.svg`
-  width: 300px;
-  height: 300px;
-
-  path {
-    stroke: white;
-    stroke-width: 2;
-  }
+const Button = styled(motion.button)`
+  border: none;
+  font-size: 16px;
+  padding: 7px;
+  border-radius: 5px;
+  font-weight: bold;
 `
-
-const svg = {
-  start: {
-    fill:"rgba(255,255,255,0)",
-    pathLength:0,
-  },
-  end: {
-    fill:"rgba(255,255,255,1)",
-    pathLength:1,
-  },
-}
-
-const boxVariants = {
-  initial:(isBack : boolean) => ({
-    x: isBack ? -500 : 500,
-    opacity: 0,
-    scale: 0,
-  }),
-  animate: {
-    x:0,
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.3,
-    }
-  },
-  exit:(isBack : boolean) => ({
-    x: isBack ? 500 : -500,
-    scale: 0,
-    opacity: 0,
-    transition: {
-      duration: 0.3,
-    }
-  })
-}
 
 const overlay = {
   initial:{
@@ -108,15 +68,52 @@ const overlay = {
   }
 }
 
+const boxVariants = {
+  initial: {
+    scale: 1
+  },
+  hover:(n : number) => ({
+    scale: 1.1,
+    transformOrigin:  
+      n ===1 ? 'right bottom' :
+      n === 2 ? 'left bottom'  :
+      n === 3 ? 'right top'  :
+      n === 4 ? 'left top' : 'center'
+  })
+}
+
+const button = {
+  initial:{
+    color:"rgb(0, 151, 230)", 
+    scale: 1,
+  },
+  tap:{
+    color:"rgb(232, 65, 24)",
+    scale: 1.2,
+  }
+}
+
 const App = () => {
   const [id, setid] = useState<null | string>(null);
-
+  const [circleSwitch, setCircleSwitch] = useState(false);
+  const toggleCircle = () => setCircleSwitch(prev => !prev)
+ 
   return (
     <Wrapper  >
       <Grid>
         {
-          [1, 2, 3, 4].map(n => 
-            <Box key={n} layoutId={n + ''} onClick={()=>setid(n+'')}/>  
+          [1,2,3,4].map(n => 
+            <Box 
+              custom={n}
+              key={n}
+              variants={boxVariants}
+              initial='initial'
+              whileHover='hover'
+              layoutId={n + ''} 
+              onClick={()=>setid(n+'')}>
+              {n === 2 && (circleSwitch ? null : <Circle layoutId='circle'/>)}
+              {n === 3 && (circleSwitch ? <Circle layoutId='circle'/> : null)}
+            </Box>  
           )
         }
       </Grid>
@@ -129,10 +126,17 @@ const App = () => {
           animate='animate' 
           exit='exit'
           >
-            <Box style={{width:400, height: 200}} layoutId={id}/>
+            <Box style={{width:450, height: 300, backgroundColor:'rgba(255, 255, 255, 1)'}} layoutId={id}/>
           </Overlay> : null
         }
       </AnimatePresence>
+      <Button 
+        variants={button}
+        initial='initial'
+        whileTap='tap'
+        onClick={toggleCircle}>
+        Switch
+      </Button>
     </Wrapper>
   );
 };

@@ -4,6 +4,7 @@ import App from './App';
 import { ThemeProvider, createGlobalStyle } from 'styled-components';
 import { darkTheme } from './theme';
 import { RecoilRoot } from 'recoil';
+import { Routes, BrowserRouter, Route } from 'react-router-dom';
 
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -77,7 +78,11 @@ root.render(
     <RecoilRoot>
       <ThemeProvider theme={darkTheme}>
         <GlobalStyle />
-        <App />
+        <BrowserRouter>
+          <Routes>
+            <Route path='/animation' element={<App />}/>
+          </Routes>
+        </BrowserRouter>
       </ThemeProvider>
     </RecoilRoot>
   </React.StrictMode>
