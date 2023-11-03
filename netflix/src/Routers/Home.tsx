@@ -1,27 +1,105 @@
 import React, { useState } from 'react';
 import {useQuery} from 'react-query'
-import { getMovies } from '../api';
+import { IGetMoviesResult, getMovies } from '../api';
+import styled from 'styled-components';
+import { motion, AnimatePresence } from 'framer-motion';
+import { makeImagePath } from '../utils';
+
+const Wrapper = styled.div`
+  background: black;
+`
+
+const Loader = styled.div`
+  height: 20vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+const Banner = styled.div<{bgPhoto: string}>`
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), 
+    url(${(props) => props.bgPhoto});
+  background-size: cover;
+`
+
+const Title = styled.h2`
+  font-size: 68px;
+  margin-bottom: 20px;
+`
+
+const OverView = styled.p`
+  font-size: 30px;
+  width:50%;
+`
+
+const Slider = styled.div`
+  position: relative;
+  top: -100px;
+`
+
+const Row = styled(motion.div)`
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(6, 1fr);
+  position: absolute;
+  width: 100%;
+`
+
+const Box = styled(motion.div)`
+  background-color: white;
+  height: 200px;
+  color: red;
+  font-size: 66px;
+`
+
+
 
 const Home = () => {
-  const {isLoading, data} = useQuery(['movies',"nowplaying" ],getMovies);
-
-  console.log(data);
-  
+  const {isLoading, data} = useQuery<IGetMoviesResult>(['movies',"nowplaying" ],getMovies);
 
   const[index, setIndex] = useState(0);
 
   const incraseIndex = () => setIndex(prev => prev + 1);
  
   return (
-    <div>
+    <Wrapper>
       {isLoading ? (
-        <div>...loading</div>) : (
-          <div>
-            {data?.results[0].title}
-            {data?.results[0].overview}
-          </div>
+        <Loader>...loading</Loader>) : (
+          <>
+            <Banner
+              onClick={incraseIndex}
+              bgPhoto={makeImagePath(data?.results[0].backdrop_path || "")}
+            >
+              <Title>{data?.results[0].title}</Title>
+              <OverView>{data?.results[0].overview}</OverView>
+            </Banner>
+            <Slider>
+              <AnimatePresence>
+                <Row
+                  initial= {{
+                    x: window.outerWidth + 10,
+                  }}
+                  animate= {{
+                    x: 0,
+                  }}
+                  exit= {{
+                    x: -window.outerWidth - 10,
+                  }}
+                >
+                  {[1,2,3,4,5,6].map(i => (
+                    <Box key={i}>{i}</Box>
+                  ))}
+                </Row>
+              </AnimatePresence>
+            </Slider>
+          </>
       )}
-    </div>
+    </Wrapper>
   );
 };
 
