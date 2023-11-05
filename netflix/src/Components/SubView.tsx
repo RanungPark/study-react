@@ -1,5 +1,5 @@
-import { AnimatePresence, MotionValue, motion } from 'framer-motion';
-import React, { useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import React from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
 import { IGetMoviesResult } from '../api';
@@ -16,7 +16,8 @@ const Overlay = styled(motion.div)`
 `;
 
 const Wapper = styled(motion.div)`
-  position: absolute;
+  position: fixed;
+  top: 80px;
   width: 40vw;
   height: 80vh;
   left: 0;
@@ -102,20 +103,20 @@ const SubViewVoteAverage = styled.p`
 `;
 
 interface ISubViewProps {
-  scrollY : number,
   data: IGetMoviesResult | undefined,
-  title: string
+  title: string,
+  type: string
 }
 
-const SubView:React.FC<ISubViewProps> = ({scrollY, data, title}) => {
-  const bigMovieMatch = useRouteMatch<{ movieId: string }>(`/movies/${title}/:movieId`);
+const SubView:React.FC<ISubViewProps> = ({data, title, type}) => {
+  const bigMovieMatch = useRouteMatch<{ movieId: string }>(`/${type}/${title}/:movieId`);
   
   const clickedMovie =
     bigMovieMatch?.params.movieId &&
     data?.results.find((movie) => movie.id === +bigMovieMatch.params.movieId);
 
   const history = useHistory();
-  const onOverlayClick = () => history.push("/");
+  const onOverlayClick = () => type === 'tv' ? history.push("/tv") : history.push("/");
 
   return (
     <>
@@ -128,7 +129,6 @@ const SubView:React.FC<ISubViewProps> = ({scrollY, data, title}) => {
               animate={{ opacity: 1 }}
             />
             <Wapper
-              style={{ top: scrollY + 100 }}
               layoutId={title+bigMovieMatch.params.movieId}
             >
               {clickedMovie && (
@@ -140,7 +140,7 @@ const SubView:React.FC<ISubViewProps> = ({scrollY, data, title}) => {
                     <SubViewPoster
                       bgPhoto={makeImagePath(clickedMovie.poster_path)}
                     />
-                    <SubViewTitle>{clickedMovie.title}</SubViewTitle>
+                    <SubViewTitle>{clickedMovie.original_name ? clickedMovie.original_name : clickedMovie.title }</SubViewTitle>
                   </SubViewHeader>
                   <SubViewBody>
                     <SubViewOverview>{clickedMovie.overview}</SubViewOverview>
