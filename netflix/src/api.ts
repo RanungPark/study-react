@@ -8,6 +8,7 @@ interface IGetMovie {
   id: number;
   original_language: string;
   original_title: string;
+  original_name?: string;
   overview: string;
   popularity: number;
   poster_path: string;
@@ -45,18 +46,18 @@ export function getUpcomingMovies () {
   return fetch(`${BASE_PATH}/movie/upcoming?api_key=${API_KEY}`).then(response => response.json())
 }
 
+export function getAiringTodayTv () {
+  return fetch(`${BASE_PATH}/tv/airing_today?api_key=${API_KEY}`).then(response => response.json())
+}
 
+export function getOnTheAirTv () {
+  return fetch(`${BASE_PATH}/tv/on_the_air?api_key=${API_KEY}`).then(response => response.json())
+}
 
-const a =`https://api.themoviedb.org/3/movie/popular?api_key=1c9fa411020ea19bf92d1e8689870164`
+export function getPopularTv () {
+  return fetch(`${BASE_PATH}//tv/popular?api_key=${API_KEY}`).then(response => response.json())
+}
 
-const b =`https://api.themoviedb.org/3/movie/top_rated?api_key=1c9fa411020ea19bf92d1e8689870164`
-
-const c =`https://api.themoviedb.org/3/movie/upcoming?api_key=1c9fa411020ea19bf92d1e8689870164`
-
-const d =`https://api.themoviedb.org/3/tv/latest?api_key=1c9fa411020ea19bf92d1e8689870164`
-
-const e =`https://api.themoviedb.org/3/tv/airing_today?api_key=1c9fa411020ea19bf92d1e8689870164`
-
-const f =`https://api.themoviedb.org/3/tv/popular?api_key=1c9fa411020ea19bf92d1e8689870164`
-
-const g =`https://api.themoviedb.org/3/tv/top_rated?api_key=1c9fa411020ea19bf92d1e8689870164`
+export function getTopRatedTv () {
+  return fetch(`${BASE_PATH}/tv/top_rated?api_key=${API_KEY}`).then(response => response.json())
+}
