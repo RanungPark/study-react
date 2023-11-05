@@ -103,6 +103,9 @@ const navVariants = {
   },
   scroll: {
     backgroundColor: "rgba(0, 0, 0, 1)",
+    transition: {
+      duration : 0.5
+    },
   },
 };
 
@@ -110,7 +113,7 @@ interface IForm {
   keyword: string;
 }
 
-function Header() {
+const Header = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const homeMatch = useRouteMatch("/");
   const tvMatch = useRouteMatch("/tv");
@@ -142,7 +145,7 @@ function Header() {
     history.push(`/search?keyword=${data.keyword}`);
   };
   return (
-    <Nav variants={navVariants} animate={navAnimation} initial={"top"}>
+    <Nav variants={navVariants} transition={{duration : 0.5}} animate={navAnimation} initial={"top"}>
       <Col>
         <Logo
           variants={logoVariants}
