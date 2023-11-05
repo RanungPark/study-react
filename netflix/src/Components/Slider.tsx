@@ -113,12 +113,13 @@ const offset = 6;
 interface ISliderProps {
   data: IGetMoviesResult | undefined,
   title: string,
+  type: string,
 }
 
-const Slider: React.FC<ISliderProps> = ({data, title}) => {
+const Slider: React.FC<ISliderProps> = ({data, title, type}) => {
   const history = useHistory();
   const onBoxClicked = (movieId: number) => {
-    history.push(`/movies/${title}/${movieId}`);
+    history.push(`/${type}/${title}/${movieId}`);
   };
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
@@ -187,21 +188,20 @@ const Slider: React.FC<ISliderProps> = ({data, title}) => {
         key={index}
       >
         {data?.results
-          .slice(1)
           .slice(offset * index, offset * index + offset)
           .map((movie) => (
             <Box
-              layoutId={movie.id + ""}
+              layoutId={title+movie.id + ""}
               key={movie.id}
               whileHover="hover"
               initial="normal"
               variants={boxVariants}
               onClick={() => onBoxClicked(movie.id)}
               transition={{ type: "tween" }}
-              bgPhoto={makeImagePath(movie.backdrop_path, "w500")}
+              bgPhoto={makeImagePath(movie.backdrop_path)}
             >
               <Info variants={infoVariants}>
-                <h4>{movie.title}</h4>
+                <h4>{movie.original_name ? movie.original_name : movie.title}</h4>
               </Info>
             </Box>
           ))}
