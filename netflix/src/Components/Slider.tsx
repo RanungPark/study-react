@@ -5,6 +5,7 @@ import { IGetMoviesResult } from '../api';
 import { makeImagePath } from '../utils';
 import { useHistory } from 'react-router-dom';
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
+import { TbMovieOff } from 'react-icons/tb';
 
 const Wrapper = styled(motion.div)`
   position: relative;
@@ -41,7 +42,7 @@ const Arrow = styled(motion.div)<{ arrowRight : boolean}>`
 `
 
 const Box = styled(motion.div)<{ bgPhoto: string }>`
-  background-color: white;
+  background-color: gray;
   background-image: url(${(props) => props.bgPhoto});
   background-size: cover;
   background-position: center center;
@@ -57,6 +58,17 @@ const Box = styled(motion.div)<{ bgPhoto: string }>`
   }
 `;
 
+const NonImag = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  flex-direction: column;
+  p{
+    font-size: 16px;
+  }
+
+`
 const Info = styled(motion.div)`
   padding: 10px;
   background-color: ${(props) => props.theme.black.lighter};
@@ -198,8 +210,11 @@ const Slider: React.FC<ISliderProps> = ({data, title, type}) => {
               variants={boxVariants}
               onClick={() => onBoxClicked(movie.id)}
               transition={{ type: "tween" }}
-              bgPhoto={makeImagePath(movie.backdrop_path)}
+              bgPhoto={makeImagePath(movie.backdrop_path, 'w500')}
             >
+              <NonImag>
+                {movie.backdrop_path ? "" : <><TbMovieOff/><p>This is no image</p></>}
+              </NonImag>
               <Info variants={infoVariants}>
                 <h4>{movie.original_name ? movie.original_name : movie.title}</h4>
               </Info>
