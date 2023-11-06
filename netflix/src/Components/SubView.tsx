@@ -4,7 +4,8 @@ import { useHistory, useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
 import { IGetMoviesResult } from '../api';
 import { makeImagePath } from '../utils';
-import {AiFillStar} from 'react-icons/ai'
+import {AiFillStar} from 'react-icons/ai';
+import { TbMovieOff } from 'react-icons/tb';
 
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -28,15 +29,28 @@ const Wapper = styled(motion.div)`
   background-color: ${(props) => props.theme.black.lighter};
 `;
 
+const NonImag = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  flex-direction: column;
+  font-size: 77px;
+  p{
+    font-size: 16px;
+  }
+`
+
 const SubViewCover = styled.div<{ bgPhoto: string}>`
   width: 100%;
   background-image: linear-gradient(to top, black, transparent), url(${(props) => props.bgPhoto});
   background-size: cover;
   background-position: center center;
   height: 400px;
+  background-color: gray;
 `;
 
-const SubViewHeader = styled.div`
+const SubViewHeader = styled.div` 
   display: flex;
   align-items: center;
   top: -160px;
@@ -71,8 +85,17 @@ const SubViewTitle = styled.h3`
   top: -80px;
 `;
 
+const SubViewReleaseDate = styled.p`
+  padding-left:20px;
+  font-size: 23px;
+  top: -380px;
+  position: relative;
+  color: ${(props) => props.theme.white.lighter};
+`
+
 const SubViewOverview = styled.p`
   padding: 20px;
+  padding-right: 0;
   position: relative;
   top: -400px;
   color: ${(props) => props.theme.white.lighter};
@@ -84,14 +107,14 @@ const SubViewVote = styled.p`
   position: relative;
   top: -420px;
   color: ${(props) => props.theme.white.lighter};
-  margin:20px;
+  padding-left:20px;
   font-size: 20px;
 `;
 
 const SubViewVoteCount = styled.p`
   color: ${(props) => props.theme.white.lighter};
   font-size: 16px;
-  margin-top: 10px;
+  padding-top: 10px;
 `;
 
 const SubViewVoteAverage = styled.p`
@@ -99,7 +122,7 @@ const SubViewVoteAverage = styled.p`
   display: flex;
   align-items: center;
   font-size: 16px;
-  margin-top: 10px;
+  padding-top: 10px;
 `;
 
 interface ISubViewProps {
@@ -116,7 +139,7 @@ const SubView:React.FC<ISubViewProps> = ({data, title, type}) => {
     data?.results.find((movie) => movie.id === +bigMovieMatch.params.movieId);
 
   const history = useHistory();
-  const onOverlayClick = () => type === 'tv' ? history.push("/tv") : history.push("/");
+  const onOverlayClick = () => history.goBack();
 
   return (
     <>
@@ -135,7 +158,11 @@ const SubView:React.FC<ISubViewProps> = ({data, title, type}) => {
                 <>
                   <SubViewCover
                     bgPhoto={makeImagePath(clickedMovie.backdrop_path)}
-                  />
+                  >
+                    <NonImag>
+                      {clickedMovie.backdrop_path ? "" : <><TbMovieOff/><p>This is no image</p></>}
+                    </NonImag>
+                  </SubViewCover>
                   <SubViewHeader>
                     <SubViewPoster
                       bgPhoto={makeImagePath(clickedMovie.poster_path)}
@@ -143,6 +170,9 @@ const SubView:React.FC<ISubViewProps> = ({data, title, type}) => {
                     <SubViewTitle>{clickedMovie.original_name ? clickedMovie.original_name : clickedMovie.title }</SubViewTitle>
                   </SubViewHeader>
                   <SubViewBody>
+                    <SubViewReleaseDate>
+                      {clickedMovie.first_air_date ? clickedMovie.first_air_date : clickedMovie.release_date}
+                    </SubViewReleaseDate>
                     <SubViewOverview>{clickedMovie.overview}</SubViewOverview>
                     <SubViewVote>
                       VOTE
