@@ -9,6 +9,7 @@ interface IGetMovie {
   original_language: string;
   original_title: string;
   original_name?: string;
+  media_type?: string;
   overview: string;
   popularity: number;
   poster_path: string;
@@ -17,6 +18,8 @@ interface IGetMovie {
   video: boolean;
   vote_average: number;
   vote_count: number;
+  name?: string;
+  first_air_date?: string;
 }
 
 export interface IGetMoviesResult {
@@ -60,4 +63,12 @@ export function getPopularTv () {
 
 export function getTopRatedTv () {
   return fetch(`${BASE_PATH}/tv/top_rated?api_key=${API_KEY}`).then(response => response.json())
+}
+
+export function getSearchMovies (query: string) {
+  return fetch(`${BASE_PATH}/search/movie?api_key=${API_KEY}&query=${query}`).then(response => response.json())
+}
+
+export function getSearchTv (query: string) {
+  return fetch(`${BASE_PATH}/search/tv?api_key=${API_KEY}&query=${query}`).then(response => response.json())
 }
