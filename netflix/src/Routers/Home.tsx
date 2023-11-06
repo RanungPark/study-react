@@ -4,6 +4,7 @@ import { getPopularMovies, getNowPlayingMovies, getTopRatedMovies, getUpcomingMo
 import { makeImagePath } from "../utils";
 import Slider from '../Components/Slider';
 import SubView from '../Components/SubView';
+import { Helmet } from 'react-helmet';
 
 const Wrapper = styled.div`
   background: black;
@@ -73,6 +74,11 @@ const Home = () => {
 
   return (
     <Wrapper>
+      <Helmet>
+        <title>
+         {movieLoading ? 'Loding...' : "woongFlix-Home"}
+        </title>
+      </Helmet>
       {movieLoading ? (
         <Loader>Loading...</Loader>
       ) : (

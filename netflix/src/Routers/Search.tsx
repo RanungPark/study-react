@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { makeImagePath } from '../utils';
 import { TbMovieOff } from 'react-icons/tb';
 import SubView from '../Components/SubView';
+import { Helmet } from 'react-helmet';
 
 const Wrapper = styled.div`
   background: black;
@@ -135,6 +136,11 @@ const Search = () => {
 
   return (
     <Wrapper>
+      <Helmet>
+        <title>
+         {searchLoading ? 'Loding...' : `woongFlix-${keyword}`}
+        </title>
+      </Helmet>
       {searchLoading ? (
         <Loader>Loding...</Loader>
       ) : (
@@ -146,13 +152,14 @@ const Search = () => {
             Array(movieRow).fill(null).map((_, index) => (
               <Row key={index}>
                 {movieData && movieData?.results.slice(offset * index, offset * (index + 1)).map((movie) => (
-                  <Box 
+                  <Box
+                    layoutId={"movie"+movie.id}
                     key={movie.id}
                     bgPhoto={makeImagePath(movie.backdrop_path, 'w500')} 
                     whileHover="hover" 
                     initial="normal"
                     variants={boxVariants}
-                    onClick={() => history.push(`/search/movie/${movie.id}`)}
+                    onClick={() => history.push(`/woongflix/search/movie/${movie.id}`)}
                     >
                     <NonImag>
                       {movie.backdrop_path ? "" : <><TbMovieOff/><p>This is no image</p></>}
@@ -170,13 +177,14 @@ const Search = () => {
             Array(tvRow).fill(null).map((_, index) => (
               <Row key={index}>
                 {tvData && tvData?.results.slice(offset * index, offset * (index + 1)).map((tv) => (
-                  <Box 
+                  <Box
+                    layoutId={"tv"+tv.id}
                     key={tv.id}
                     bgPhoto={makeImagePath(tv.backdrop_path, 'w500')} 
                     whileHover="hover" 
                     initial="normal"
                     variants={boxVariants}
-                    onClick={() => history.push(`/search/tv/${tv.id}`)}
+                    onClick={() => history.push(`/woongflix/search/tv/${tv.id}`)}
                     >
                     <NonImag>
                       {tv.backdrop_path ? "" : <><TbMovieOff/><p>This is no image</p></>}

@@ -115,8 +115,8 @@ interface IForm {
 
 const Header = () => {
   const [searchOpen, setSearchOpen] = useState(false);
-  const homeMatch = useRouteMatch("/");
-  const tvMatch = useRouteMatch("/tv");
+  const homeMatch = useRouteMatch("/woongflix/");
+  const tvMatch = useRouteMatch("/woongflix/tv");
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
   const { scrollY } = useScroll();
@@ -142,7 +142,7 @@ const Header = () => {
   const history = useHistory();
   const { register, handleSubmit } = useForm<IForm>();
   const onValid = (data: IForm) => {
-    history.push(`/search?keyword=${data.keyword}`);
+    history.push(`/woongflix/search?keyword=${data.keyword}`);
   };
   return (
     <Nav variants={navVariants} transition={{duration : 0.5}} animate={navAnimation} initial={"top"}>
@@ -160,12 +160,12 @@ const Header = () => {
         </Logo>
         <Items>
           <Item>
-            <Link to="/">
+            <Link to="/woongflix/">
               Home {homeMatch?.isExact && <Circle layoutId="circle" />}
             </Link>
           </Item>
           <Item>
-            <Link to="/tv">
+            <Link to="/woongflix/tv">
               Tv Shows {tvMatch && <Circle layoutId="circle" />}
             </Link>
           </Item>

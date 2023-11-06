@@ -5,6 +5,7 @@ import { IGetMoviesResult, getAiringTodayTv, getOnTheAirTv, getPopularTv, getTop
 import { makeImagePath } from '../utils';
 import Slider from '../Components/Slider';
 import SubView from '../Components/SubView';
+import { Helmet } from 'react-helmet';
 
 const Wrapper = styled.div`
   background: black;
@@ -73,6 +74,11 @@ const Tv = () => {
 
   return (
     <Wrapper>
+      <Helmet>
+        <title>
+         {tvLoading ? 'Loding...' : "woongFlix-tv"}
+        </title>
+      </Helmet>
       {tvLoading ? (
         <Loader>Loading...</Loader>
       ) : (

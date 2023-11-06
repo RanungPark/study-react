@@ -131,7 +131,7 @@ interface ISliderProps {
 const Slider: React.FC<ISliderProps> = ({data, title, type}) => {
   const history = useHistory();
   const onBoxClicked = (movieId: number) => {
-    history.push(`/${type}/${title}/${movieId}`);
+    history.push(`/woongflix/${type}/${title}/${movieId}`);
   };
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
@@ -203,7 +203,7 @@ const Slider: React.FC<ISliderProps> = ({data, title, type}) => {
           .slice(offset * index, offset * index + offset)
           .map((movie) => (
             <Box
-              layoutId={title+movie.id + ""}
+              layoutId={title+movie.id}
               key={movie.id}
               whileHover="hover"
               initial="normal"
