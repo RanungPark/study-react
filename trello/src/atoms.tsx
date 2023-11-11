@@ -5,10 +5,14 @@ export const minuteState = atom({
   default: 0,
 })
 
-export const hoursState = selector({
+export const hoursState = selector<number>({
   key: 'hours',
   get: ({get}) => {
     const minute = get(minuteState);
     return minute / 60;
+  },
+  set: ({set}, newValue) => {
+    const minute = Number(newValue) * 60;
+    set(minuteState, minute);
   }
 })
